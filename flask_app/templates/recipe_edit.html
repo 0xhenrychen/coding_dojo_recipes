@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Recipes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-evenly;
+        }
+
+        form {
+            width: 800px;
+            text-align: center;
+            display: inline-block;
+            padding: 20px;
+            color: black;
+            
+        }
+
+        label {
+            margin: 10px;
+        }
+
+        input[type=submit] {
+            padding: 5px 20px;
+            background-color: black;
+            color: white;
+            border-radius: 10px;
+            border: 0px;
+        }
+    </style>
+</head>
+<body>
+    <h2>{{ session["first_name"] }}, Edit Recipe!</h2>
+    <p><a href="/recipes">Back To Recipe</a> <a href="/logout">Log Out</a></p>
+    {% with messages = get_flashed_messages(category_filter=["recipe"]) %}
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: red;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <form action="/update_recipe_form" method="POST">
+        <div class="container">
+            <div class="container_left">
+                <div>
+                    <label for="name">Name</label>
+                    <input type="hidden" name="id" value="{{ recipe.id }}">
+                    <input type="text" name="name" value="{{ recipe.name }}">
+                </div>
+                <div>
+                    <label for="description">Description</label>
+                    <input type="text" name="description" value="{{ recipe.description }}">
+                </div>
+                <div>
+                    <label for="instructions">Instructions</label>
+                    <textarea name="instructions" cols="40" rows="10">{{ recipe.instructions }}</textarea>
+                </div>
+            </div>
+            <div class="container_right">
+                <div>
+                    <label for="date">Date Cooked/Made:</label>
+                    <input type="date" name="date" required="required" value="{{ recipe.date }}">
+                </div>
+                <div>
+                    <label for="under_30_mins">Under 30 minutes?</label>
+                    <input type="radio" name="under_30_mins" value="Yes" required="required">
+                    <label for="under_30_mins_yes">Yes</label>
+                    <input type="radio" name="under_30_mins" value="No" required="required">
+                    <label for="under_30_mins_no">No</label>
+                </div>
+                <div>
+                    <input type="submit" value="Submit">
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

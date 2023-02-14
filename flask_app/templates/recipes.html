@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Recipes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .container {
+            width: 2000px;
+            display: flex;
+            justify-content: space-evenly;
+        }
+    </style>
+</head>
+<body>
+    <h2>Welcome, {{ session["first_name"] }}!</h2>
+    <p>All posted recipes: <a href="/recipes/new">+Create</a> <a href="/logout">Log Out</a></p>
+    <table class="table table-light">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Under 30 Mins?</th>
+                <th>Posted By</th>
+                <th>Posted On</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for recipe in recipes %}
+                <tr>
+                    <td>{{ recipe.name }}</td>
+                    <td>{{ recipe.under_30_mins }}</td>
+                    <td>{{ recipe.first_name }} {{ recipe.last_name }}</td>
+                    <td>{{ recipe.date }}</td>
+                    {% if recipe.email == session["email"] %}
+                        <td><a href="/recipes/view/{{ recipe.id }}">View Recipe</a> | <a href="/recipes/edit/{{ recipe.id }}">Edit</a> | <a href="/recipes/delete/{{ recipe.id }}">Delete</a></td>
+                    {% else %}
+                        <td><a href="/recipes/view/{{ recipe.id }}">View Recipe</a></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
