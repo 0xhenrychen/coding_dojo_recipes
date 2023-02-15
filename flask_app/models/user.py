@@ -2,8 +2,6 @@
 from flask_app.config.mysqlconnection import connectToMySQL
 from flask import flash
 from flask_app.models import recipe
-# from flask_bcrypt import Bcrypt        
-# bcrypt = Bcrypt(app)
 
 import re
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
@@ -38,7 +36,8 @@ class User:
         query = ''' INSERT INTO users (first_name, last_name, email, password)
                     VALUES (%(first_name)s, %(last_name)s, %(email)s, %(password)s);
                 '''
-        connectToMySQL(database).query_db(query, data)
+        results = connectToMySQL(database).query_db(query, data)
+        return results
     
     @classmethod
     def connect_recipes_to_users_join(cls):
@@ -104,7 +103,8 @@ class User:
         if not EMAIL_REGEX.match(user['email']):
             flash("Please enter a valid email address.", "login")
             is_valid = False
-        
+            return is_valid
+            
         query = ''' SELECT * FROM users
                     WHERE email = %(email)s
                 '''
@@ -114,21 +114,22 @@ class User:
             flash("That email doesn't exist. Please register for a new account.", "login")
             check_if_email_exists = True
             is_valid = False
+            return is_valid
+        
+  
             
         if len(user["password3"]) < 1 and check_if_email_exists == False:
             flash("Please enter a password.", "login")
             check_password_twice = True
             is_valid = False
-
-        query = ''' SELECT * FROM users
-                    WHERE password = %(password3)s AND email = %(email)s;
-                '''
-        results_password_check = connectToMySQL(database).query_db(query, user)
         
-        if results_password_check == () and check_password_twice == False and check_if_email_exists == False:
-        # user_in_db = User.get_user_by_email(user["email"])
-        # if not bcrypt.check_password_hash(user_in_db.password, user["password"]):
-        #     Print("if not in bcrypt check password")
-            flash("Password is incorrect. Please try again.", "login")
-            is_valid = False
+        # # Comment out below to test out hash validation.
+        # query = ''' SELECT * FROM users
+        #             WHERE password = %(password3)s AND email = %(email)s;
+        #         '''
+        # results_password_check = connectToMySQL(database).query_db(query, user)
+        
+        # if results_password_check == () and check_password_twice == False and check_if_email_exists == False:
+        #     flash("Password is incorrect. Please try again.", "login")
+        #     is_valid = False
         return is_valid

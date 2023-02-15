@@ -78,10 +78,17 @@
                 </div>
                 <div>
                     <label for="under_30_mins">Under 30 minutes?</label>
-                    <input type="radio" name="under_30_mins" value="Yes" required="required">
-                    <label for="under_30_mins_yes">Yes</label>
-                    <input type="radio" name="under_30_mins" value="No" required="required">
-                    <label for="under_30_mins_no">No</label>
+                    {% if recipe.under_30_mins == "Yes" %}
+                        <input type="radio" name="under_30_mins" value="Yes" required="required" checked />
+                        <label for="under_30_mins_yes">Yes</label>
+                        <input type="radio" name="under_30_mins" value="No" required="required">
+                        <label for="under_30_mins_no">No</label>
+                    {% else %}
+                        <input type="radio" name="under_30_mins" value="Yes" required="required">
+                        <label for="under_30_mins_yes">Yes</label>
+                        <input type="radio" name="under_30_mins" value="No" required="required" checked />
+                        <label for="under_30_mins_no">No</label>
+                    {% endif %}
                 </div>
                 <div>
                     <input type="submit" value="Submit">
